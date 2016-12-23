@@ -10,6 +10,8 @@ def get_args():
                         help='includes movies shown in less than ten cinemas')
     parser.add_argument('--movies', action='store', default=10,
                         help='amount for console outputting, default = 10', type=int)
+    parser.add_argument('--sort', '-s', action='store', default="rating",
+                        help='key parameter for sorting movies', type=str)
     return parser.parse_args()
 
 
@@ -26,9 +28,13 @@ def parse_afisha_list(raw_html):
             for title, cinemas in zip(titles, cinemas)]
 
 
-def fetch_movies_info(movies, including_art_house):
+def including_art_house_movies(movies, including_art_house, ten_cinemas=10):
+    if not including_art_house:
+        return [movie for movie in movies if movie['cinemas'] > ten_cinemas]
+
+
+def fetch_movies_info(movies):
     kinopoisk_search_url = 'http://kinopoisk.ru/index.php?first=yes&kp_query=%s'
-    ten_cinemas = 10
     timeout_seconds = 2
     headers = {
         'Accept': '*/*',
@@ -37,8 +43,6 @@ def fetch_movies_info(movies, including_art_house):
         'Content-Type': 'text/html;charset=UTF-8',
         'User-Agent': 'Agent:Mozilla/5.0 (Windows NT 6.1; WOW64))'
     }
-    if not including_art_house:
-        movies = [movie for movie in movies if movie['cinemas'] > ten_cinemas]
     for movie in movies:
         film_url = kinopoisk_search_url % movie['title']
         sleep(timeout_seconds)
@@ -50,7 +54,11 @@ def fetch_movies_info(movies, including_art_house):
         except AttributeError:
             movie['rating'] = .0
             movie['votes'] = "0"
-    return sorted(movies, key=lambda movie: movie['rating'], reverse=True)
+    return movies
+
+
+def get_sorted_movies(movies, sort_key):
+    return sorted(movies, key=lambda movie: movie[sort_key], reverse=True)
 
 
 def output_movies_to_console(movies_info, amount_to_print):
@@ -65,6 +73,8 @@ def output_movies_to_console(movies_info, amount_to_print):
 if __name__ == '__main__':
     args = get_args()
     movies = parse_afisha_list(fetch_afisha_page())
-    print('got titles and cinemas. fetching their kinopoisk rating...')
-    movies_info = fetch_movies_info(movies, args.art)
-    output_movies_to_console(movies_info, args.movies)
+    print('Got titles and cinemas. Fetching their kinopoisk rating...')
+    desired_movies_info = fetch_movies_info(including_art_house_movies(movies, args.art))
+    print('Got ratings. Sorting and outputting movies...')
+    sorted_desired_movies = get_sorted_movies(desired_movies_info, args.sort)
+    output_movies_to_console(sorted_desired_movies, args.movies)
