@@ -31,6 +31,8 @@ def parse_afisha_list(raw_html):
 def including_art_house_movies(movies, including_art_house, ten_cinemas=10):
     if not including_art_house:
         return [movie for movie in movies if movie['cinemas'] > ten_cinemas]
+    else:
+        return movies
 
 
 def fetch_movies_info(movies):
