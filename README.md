@@ -4,7 +4,7 @@ Scripts parses movies\` shedule from [afisha](http://www.afisha.ru/msk/schedule_
 ##launching
 `git clone <repository url>`  
 `pip install requirements.txt`  
-python cinemas.py [--movies MOVIES] [--art] [--sorting, -s rating]`  
+`python cinemas.py [--movies MOVIES] [--art] [--sorting, -s rating]`  
 
 `--art` - adding this arguement to response will include movies shown in less than 10 cinemas. Suggested that arthouse movies are shown in small amount of cinemas.  
 
