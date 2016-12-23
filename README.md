@@ -1,5 +1,5 @@
 # 13_cinemas
-Scripts parses movies` shedule from afisha and then parse kinopoisk for getting ratings and votes. In default, script outputs table with 10 movies info which are title, amount of cinemas movie is shown now, rating and votes. Outputted movies are sorted by kinopoisk-rating descent order.
+Scripts parses movies` shedule from [afisha](http://www.afisha.ru/msk/schedule_cinema/) and then parse [kinopoisk](http://kinopoisk.ru) for getting ratings and votes. In default, script outputs table with 10 movies info which are title, amount of cinemas movie is shown now, rating and votes. Outputted movies are sorted by kinopoisk-rating descent order.
 
 ##launching
 `git clone <repository url>`
